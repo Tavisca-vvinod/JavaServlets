@@ -1,0 +1,109 @@
+package sample;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+/**
+ * Servlet implementation class FormHandler
+ */
+@WebServlet("/HandleForm")
+public class FormHandler extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public FormHandler() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		response.getWriter().append("Served at: ").append(request.getContextPath());
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected String getEvens(int lowerRange,int upperRange)
+	{
+		String numbers="";
+		for(int i=lowerRange;i<=upperRange;i++)
+		{
+			if(i%2==0)
+			{
+				numbers=numbers+" "+Integer.toString(i);
+			}
+		}
+		return numbers;
+	}
+	protected String getOdds(int lowerRange,int upperRange)
+	{
+		String numbers="";
+		for(int i=lowerRange;i<=upperRange;i++)
+		{
+			if(i%2!=0)
+			{
+				numbers=numbers+" "+Integer.toString(i);
+			}
+		}
+		return numbers;
+	}
+	protected String getPrimes(int lowerRange,int upperRange)
+	{
+		String numbers="";
+		for(int i=lowerRange;i<=upperRange;i++)
+		{
+			boolean prime=true;
+			for(int j=2;j<i;j++) {
+				if(i%j==0)
+				{
+					prime=false;
+				}
+			}
+			if(prime==true&&i!=1)
+			{
+				numbers=numbers+" "+Integer.toString(i);
+			}
+		}
+		return numbers;
+	}
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		String lowerRange = request.getParameter("lowerRange");
+		String upperRange = request.getParameter("upperRange");
+        String action = request.getParameter("list");
+        String answer="";
+        
+        if(action.equals("p")) {	
+            answer=getPrimes(Integer.parseInt(lowerRange),Integer.parseInt(upperRange));
+        }
+        if(action.equals("e")) {	
+        	answer=getEvens(Integer.parseInt(lowerRange),Integer.parseInt(upperRange));
+        }
+        if(action.equals("o")) {	
+        	answer=getOdds(Integer.parseInt(lowerRange),Integer.parseInt(upperRange));
+        }
+        
+        PrintWriter writer = response.getWriter();
+
+        String htmlRespone = "<html>";
+        htmlRespone += "<h2>The numbers are " + answer+ "<br/>"+"</h2>";      
+        htmlRespone += "</html>";
+         
+        // return response
+        writer.println(htmlRespone);
+        
+	}
+
+}
